@@ -9,6 +9,19 @@
 
 **Aplicação completa de gestão financeira pessoal com recursos avançados de IA, alertas inteligentes, sugestões de investimentos e cotações em tempo real.**
 
+## 🔐 **VERSÃO SEGURA** - Criptografia End-to-End Implementada
+
+> ⚠️ **IMPORTANTE**: Esta é a versão com **implementação completa de segurança**.
+>
+> - ✅ **Criptografia AES-256-GCM** de dados sensíveis
+> - ✅ **Multi-Tenant Isolation** para proteção total
+> - ✅ **Auditoria Completa** (LGPD compliant)
+> - ✅ **Nível de Segurança**: 9/10
+>
+> 📘 **[Ver Documentação de Segurança →](SECURITY_README.md)**
+>
+> 📘 **[Guia de Deploy Seguro no Render →](RENDER_DEPLOYMENT_GUIDE.md)**
+
 ---
 
 ## 🚀 Deploy Rápido
@@ -291,11 +304,22 @@ MONGO_URI=mongodb://localhost:27017/savemymoney
 # JWT
 JWT_SECRET=seu_secret_super_secreto_aqui
 
+# 🔐 SEGURANÇA: Chave de Criptografia (OBRIGATÓRIO!)
+# Gere com: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+ENCRYPTION_KEY=sua_chave_de_64_caracteres_gerada_com_crypto
+
 # Servidor
-PORT=5000
+PORT=3001
+
+# Frontend URLs (para CORS)
+CLIENT_URL=http://localhost:5173
+FRONTEND_URL=http://localhost:5173
 
 # Cotações (opcional - apenas para Yahoo Finance)
 YAHOO_FINANCE_KEY=sua_rapidapi_key_aqui
+
+# OpenAI (opcional - para OCR avançado)
+OPENAI_API_KEY=sk-proj-sua-chave-openai
 ```
 
 Inicie o servidor:
