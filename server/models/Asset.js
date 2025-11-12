@@ -5,10 +5,12 @@ const mongoose = require('mongoose');
  * Represents an individual asset in a portfolio
  */
 const AssetSchema = new mongoose.Schema({
-  user: {
+  // Tenant ID (isolamento multi-tenant) - CRÍTICO
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
+    index: true
   },
   portfolio: {
     type: mongoose.Schema.Types.ObjectId,
@@ -73,9 +75,10 @@ const AssetSchema = new mongoose.Schema({
     type: String,
     default: 'BRL'
   },
-  notes: {
+  // Notas CRIPTOGRAFADAS
+  notesEncrypted: {
     type: String,
-    default: ''
+    default: null
   },
   transactions: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -94,8 +97,8 @@ const AssetSchema = new mongoose.Schema({
 });
 
 // Indexes
-AssetSchema.index({ user: 1, portfolio: 1, isActive: 1 });
-AssetSchema.index({ symbol: 1 });
+AssetSchema.index({ userId: 1, portfolio: 1, isActive: 1 });
+AssetSchema.index({ userId: 1, symbol: 1 });
 
 // Virtual for allocation percentage (calculated at runtime)
 AssetSchema.virtual('allocationPercent').get(function() {

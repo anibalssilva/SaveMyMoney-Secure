@@ -3,6 +3,8 @@ try {
   const express = require('express');
   const cors = require('cors');
   const morgan = require('morgan');
+  const mongoSanitize = require('express-mongo-sanitize');
+  const hpp = require('hpp');
 
   const connectDB = require('./config/db');
   const securityMiddleware = require('./middleware/security');
@@ -58,6 +60,12 @@ try {
   // Body Parser
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+  // Data Sanitization against NoSQL query injection
+  app.use(mongoSanitize());
+
+  // Prevent HTTP Parameter Pollution
+  app.use(hpp());
 
   // Logging Middleware
   if (process.env.NODE_ENV === 'production') {

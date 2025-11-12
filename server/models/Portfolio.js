@@ -5,19 +5,22 @@ const mongoose = require('mongoose');
  * Represents an investment portfolio for a user
  */
 const PortfolioSchema = new mongoose.Schema({
-  user: {
+  // Tenant ID (isolamento multi-tenant) - CRÍTICO
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    required: true,
+    index: true
+  },
+  // Nome CRIPTOGRAFADO
+  nameEncrypted: {
+    type: String,
     required: true
   },
-  name: {
+  // Descrição CRIPTOGRAFADA
+  descriptionEncrypted: {
     type: String,
-    required: true,
-    default: 'Minha Carteira'
-  },
-  description: {
-    type: String,
-    default: ''
+    default: null
   },
   assets: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -52,6 +55,6 @@ const PortfolioSchema = new mongoose.Schema({
 });
 
 // Index for faster queries
-PortfolioSchema.index({ user: 1, isActive: 1 });
+PortfolioSchema.index({ userId: 1, isActive: 1 });
 
 module.exports = mongoose.model('Portfolio', PortfolioSchema);
