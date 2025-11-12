@@ -14,24 +14,23 @@ services:
   - type: web
     name: savemymoney-backend
     env: node
+    runtime: node
     region: oregon
     plan: free
-    buildCommand: cd server && npm install
-    startCommand: cd server && npm start
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 5000
-      - key: MONGO_URI
-        fromDatabase:
-          name: savemymoney-mongodb
-          property: connectionString
-      - key: JWT_SECRET
-        generateValue: true
-      - key: SENTRY_DSN
-        value: ""
-    healthCheckPath: /api/health
+        value: 3001
+      # IMPORTANTE: Configure estas variáveis manualmente no dashboard do Render:
+      # - MONGO_URI: sua connection string do MongoDB Atlas
+      # - JWT_SECRET: chave secreta gerada (32+ caracteres)
+      # - ENCRYPTION_KEY: chave de criptografia gerada (64 caracteres)
+      # - CLIENT_URL: URL do frontend (será preenchido após deploy)
+      # - FRONTEND_URL: URL do frontend (mesma que CLIENT_URL)
 
   # Frontend (Static Site)
   - type: web
@@ -39,18 +38,17 @@ services:
     env: static
     region: oregon
     plan: free
-    buildCommand: cd client && npm install && npm run build
-    staticPublishPath: ./client/dist
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: savemymoney-backend
-          envVarKey: RENDER_EXTERNAL_URL
+        # IMPORTANTE: Substitua pela URL real do backend após o deploy
+        value: https://savemymoney-backend.onrender.com
 
   # ML API (Python FastAPI)
   - type: web
